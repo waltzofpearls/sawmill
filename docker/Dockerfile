@@ -1,6 +1,6 @@
 FROM golang:1.7-wheezy
 
-WORKDIR /go/src/app
+WORKDIR /go/src/github.com/waltzofpearls/sawmill
 
 COPY . .
 RUN make all

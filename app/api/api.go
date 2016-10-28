@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/waltzofpearls/sawmill/app/config"
 	"github.com/waltzofpearls/sawmill/app/logger"
@@ -23,7 +22,6 @@ func New() *Api {
 }
 
 func (a *Api) ConfigWith(file string) {
-	log.Printf("%v\n", file)
 	a.Config = config.New(file)
 	a.Logger = logger.New(a.Config)
 
