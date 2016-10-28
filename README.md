@@ -8,8 +8,7 @@ phishing, malware, viruses, unwanted software or reported suspicious.
 ## Get started
 
 ```
-git clone https://github.com/waltzofpearls/sawmill.git
-cd sawmill
+git clone https://github.com/waltzofpearls/sawmill.git && cd sawmill
 make docker
 ```
 
