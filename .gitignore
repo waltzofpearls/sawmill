@@ -25,5 +25,7 @@ _testmain.go
 
 *.swp
 .DS_Store
-config.json
+config.yml
+c.out
+c.out.tmp
 sawmill
