@@ -1,19 +1,8 @@
 package main
 
-import (
-	"fmt"
-	"os"
-
-	"github.com/urfave/cli"
-)
+import "github.com/waltzofpearls/sawmill/app"
 
 func main() {
-	app := cli.NewApp()
-	app.Name = "sawmill"
-	app.Usage = "Look up possible malware infected URLs"
-	app.Action = func(c *cli.Context) error {
-		fmt.Println("Hello friend!")
-		return nil
-	}
-	app.Run(os.Args)
+	app := app.New()
+	app.Run()
 }

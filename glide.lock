@@ -1,6 +1,12 @@
-hash: 14f57dcbc85a3c6db64f0f2c09c0f88b8e91463eebd654567b55113ce26df10f
-updated: 2016-10-27T20:05:19.497079834-07:00
+hash: 2c11b6b272d5b87068d4603b95fb33295422ce03fe09bba1844043be2ff73848
+updated: 2016-10-28T00:57:23.31183088-07:00
 imports:
+- name: github.com/gorilla/mux
+  version: 0eeaf8392f5b04950925b8a69fe70f110fa7cbfc
+- name: github.com/uber-go/zap
+  version: f2929c57adb5be8fb03cad9a6912c509a5cb60af
 - name: github.com/urfave/cli
   version: a14d7d367bc02b1f57d88de97926727f2d936387
+- name: gopkg.in/yaml.v2
+  version: a5b47d31c556af34a302ce5d659e6fea44d90de0
 testImports: []
