@@ -5,5 +5,12 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile
+  lb:
+    image: haproxy:1.6-alpine
+    links:
+      - api
     ports:
-      - "9000:9000"
+      - "8000:80"
+      - "9000:90"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg

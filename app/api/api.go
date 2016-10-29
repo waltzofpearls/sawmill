@@ -40,13 +40,12 @@ func (a *Api) ConfigWith(filePath string) error {
 func (a *Api) Serve() error {
 	a.Route("/urlinfo/1", &Version1{})
 
-	a.Logger.Info("Blah Blah Blah")
-	a.Logger.Debug("Blah Blah Blah")
-
 	w, err := a.Logger.ServerLogWriter()
 	if err != nil {
 		return err
 	}
+
+	a.Logger.Info("Start serving http request...")
 
 	http.ListenAndServe(
 		a.Config.Server.Listen,
