@@ -4,10 +4,10 @@ type JsonError struct {
 	ErrorMessage string `json:"errorMessage"`
 }
 
-func (je *JsonError) Error() string {
-	return je.ErrorMessage
+func (e JsonError) Error() string {
+	return e.ErrorMessage
 }
 
-func (je *JsonError) String() string {
-	return je.ErrorMessage
+func (e JsonError) String() string {
+	return e.ErrorMessage
 }

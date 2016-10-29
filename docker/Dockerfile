@@ -6,4 +6,7 @@ COPY . .
 RUN make
 
 COPY docker/config.docker.yml config.yml
+
+EXPOSE 9000
+
 CMD ["./sawmill"]

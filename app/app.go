@@ -32,7 +32,9 @@ func (a *App) Run() {
 	}
 	a.Cmd.Action = func(c *cli.Context) error {
 		file := c.String("config")
-		a.Api.ConfigWith(file)
+		if err := a.Api.ConfigWith(file); err != nil {
+			return err
+		}
 		a.Api.Serve()
 		return nil
 	}

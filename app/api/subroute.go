@@ -6,43 +6,52 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/waltzofpearls/sawmill/app/config"
+	"github.com/waltzofpearls/sawmill/app/logger"
+)
+
+const (
+	JsonContentTypeKey   = "Content-Type"
+	JsonContentTypeValue = "application/json; charset=UTF-8"
 )
 
 type Subrouter interface {
-	ConfigWith(*mux.Router, *config.Config)
+	ConfigWith(*mux.Router, *config.Config, *logger.Logger)
 	Handle()
 }
 
 type Subroute struct {
-	Router *mux.Router
 	Config *config.Config
+	Logger *logger.Logger
+	Router *mux.Router
 }
 
-func (sr *Subroute) ConfigWith(r *mux.Router, c *config.Config) {
+func (sr *Subroute) ConfigWith(r *mux.Router, c *config.Config, l *logger.Logger) {
 	sr.Router = r
 	sr.Config = c
+	sr.Logger = l
 }
 
-func (sr *Subroute) JsonResponseHandler(w http.ResponseWriter, r *http.Request, data interface{}) error {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+func (sr *Subroute) JsonResponseHandler(w http.ResponseWriter, r *http.Request, data interface{}) {
 	w.WriteHeader(http.StatusOK)
-	if err := json.NewEncoder(w).Encode(data); err != nil {
-		return sr.JsonErrorHandler(w, r, err)
-	}
-	return nil
+	sr.JsonBaseHandler(w, r, data)
 }
 
-func (sr *Subroute) JsonNotFoundHandler(w http.ResponseWriter, r *http.Request) error {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+func (sr *Subroute) JsonNotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
-	return nil
+	jerr := JsonError{"Uh oh! You are requesting something that does not exist."}
+	sr.JsonBaseHandler(w, r, jerr)
 }
 
-func (sr *Subroute) JsonErrorHandler(w http.ResponseWriter, r *http.Request, err error) error {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+func (sr *Subroute) JsonInternalErrorHandler(w http.ResponseWriter, r *http.Request, err error) {
 	w.WriteHeader(http.StatusInternalServerError)
-	if err := json.NewEncoder(w).Encode(JsonError{err.Error()}); err != nil {
-		panic(err)
+	jerr := JsonError{err.Error()}
+	sr.JsonBaseHandler(w, r, jerr)
+}
+
+func (sr *Subroute) JsonBaseHandler(w http.ResponseWriter, r *http.Request, data interface{}) {
+	w.Header().Set(JsonContentTypeKey, JsonContentTypeValue)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		// sr.Logger.Error("Internal server error.") with err
+		http.Error(w, "Oops! Internal server error :(", http.StatusInternalServerError)
 	}
-	return nil
 }
