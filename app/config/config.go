@@ -8,8 +8,13 @@ import (
 )
 
 type Config struct {
-	Listen struct {
-		Address string
+	Server struct {
+		Listen  string
+		LogFile string `yaml:"log_file"`
+	}
+	Application struct {
+		LogFile  string `yaml:"log_file"`
+		LogLevel string `yaml:"log_level"`
 	}
 }
 

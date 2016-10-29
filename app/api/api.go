@@ -2,7 +2,6 @@ package api
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/waltzofpearls/sawmill/app/config"
@@ -11,7 +10,7 @@ import (
 
 type ServiceProvider interface {
 	ConfigWith(string) error
-	Serve()
+	Serve() error
 }
 
 type Api struct {
@@ -28,27 +27,37 @@ func New() *Api {
 
 func (a *Api) ConfigWith(filePath string) error {
 	var err error
-	a.Config, err = config.New(filePath)
-	if err != nil {
+
+	if a.Config, err = config.New(filePath); err != nil {
 		return err
 	}
-	a.Logger = logger.New(a.Config)
+	if a.Logger, err = logger.New(a.Config); err != nil {
+		return err
+	}
 	return nil
 }
 
-func (a *Api) Serve() {
+func (a *Api) Serve() error {
 	a.Route("/urlinfo/1", &Version1{})
-	sr := &Subroute{}
-	a.Router.NotFoundHandler = http.HandlerFunc(sr.JsonNotFoundHandler)
+
+	a.Logger.Info("Blah Blah Blah")
+	a.Logger.Debug("Blah Blah Blah")
+
+	w, err := a.Logger.ServerLogWriter()
+	if err != nil {
+		return err
+	}
 
 	http.ListenAndServe(
-		a.Config.Listen.Address,
+		a.Config.Server.Listen,
 		AttachMiddleware(
 			a.Router,
 			Catch404Handler(),
-			LoggingHandler(os.Stdout),
+			LoggingHandler(w),
 		),
 	)
+
+	return nil
 }
 
 func (a *Api) Route(path string, sr Subrouter) {

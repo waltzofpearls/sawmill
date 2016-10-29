@@ -35,7 +35,9 @@ func (a *App) Run() {
 		if err := a.Api.ConfigWith(file); err != nil {
 			return err
 		}
-		a.Api.Serve()
+		if err := a.Api.Serve(); err != nil {
+			return err
+		}
 		return nil
 	}
 	a.Cmd.Run(os.Args)

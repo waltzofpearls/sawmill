@@ -1,2 +1,7 @@
-listen:
-  address: 0.0.0.0:9000
+server:
+  listen: 0.0.0.0:9000
+  log_file: logs/srv.log
+
+application:
+  log_file: logs/app.log
+  log_level: debug
