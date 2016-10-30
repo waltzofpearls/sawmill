@@ -11,4 +11,4 @@ install:
 
 script:
   - $HOME/gopath/bin/golint .
-  - make
+  - make test

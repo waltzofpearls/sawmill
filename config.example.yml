@@ -1,5 +1,5 @@
 server:
-  listen: 0.0.0.0:9000
+  listen: 0.0.0.0:8000
   log_file: logs/srv.log
 
 application:

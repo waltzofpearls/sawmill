@@ -1,7 +1,7 @@
 COMPOSE_ENV = env COMPOSE_PROJECT_NAME=sawmill \
 				  COMPOSE_FILE=docker/docker-compose.yml
 
-docker: | compose-build compose-up compose-scale
+docker: | compose-build compose-scale compose-up
 
 compose-build:
 	@echo 'Building services with docker...'
