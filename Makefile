@@ -1,10 +1,15 @@
-.PHONY: all
+.PHONY: all deps
 
 PKG = $$(glide novendor)
 
 all: build
 
 include docker/docker.mk
+
+deps:
+	@echo "Installing Glide and locked dependencies..."
+	glide --version || go get -u -f github.com/Masterminds/glide
+	glide install
 
 build: *.go
 	go build -race -o sawmill ./

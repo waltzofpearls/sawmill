@@ -9,28 +9,28 @@ import (
 
 type App struct {
 	Api api.ServiceProvider
-	Cmd *cli.App
+	Cmd Commander
 }
 
 func New() *App {
 	return &App{
 		Api: api.New(),
-		Cmd: cli.NewApp(),
+		Cmd: &Cmd{App: cli.NewApp()},
 	}
 }
 
-func (a *App) Run() {
-	a.Cmd.Name = "sawmill"
-	a.Cmd.Version = "1.0.0"
-	a.Cmd.Usage = "Look up possible malware infected URLs"
-	a.Cmd.Flags = []cli.Flag{
+func (a *App) Run() error {
+	a.Cmd.SetName("sawmill")
+	a.Cmd.SetVersion("1.0.0")
+	a.Cmd.SetUsage("Look up possible malware infected URLs")
+	a.Cmd.SetFlags([]cli.Flag{
 		cli.StringFlag{
 			Name:  "config, c",
 			Value: "config.yml",
 			Usage: "Load configuration from `FILE`",
 		},
-	}
-	a.Cmd.Action = func(c *cli.Context) error {
+	})
+	a.Cmd.SetAction(func(c *cli.Context) error {
 		file := c.String("config")
 		if err := a.Api.ConfigWith(file); err != nil {
 			return err
@@ -39,6 +39,6 @@ func (a *App) Run() {
 			return err
 		}
 		return nil
-	}
-	a.Cmd.Run(os.Args)
+	})
+	return a.Cmd.Run(os.Args)
 }

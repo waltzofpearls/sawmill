@@ -8,6 +8,7 @@ before_install:
 
 install:
   - go install -race -v std
+  - make deps
 
 script:
   - $HOME/gopath/bin/golint .
