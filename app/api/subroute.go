@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/uber-go/zap"
 	"github.com/waltzofpearls/sawmill/app/config"
 	"github.com/waltzofpearls/sawmill/app/logger"
 )
@@ -51,7 +52,14 @@ func (sr *Subroute) JsonInternalErrorHandler(w http.ResponseWriter, r *http.Requ
 func (sr *Subroute) JsonBaseHandler(w http.ResponseWriter, r *http.Request, data interface{}) {
 	w.Header().Set(JsonContentTypeKey, JsonContentTypeValue)
 	if err := json.NewEncoder(w).Encode(data); err != nil {
-		// sr.Logger.Error("Internal server error.") with err
-		http.Error(w, "Oops! Internal server error :(", http.StatusInternalServerError)
+		sr.Logger.Error(
+			"Internal server error.",
+			zap.Error(err),
+		)
+		http.Error(
+			w,
+			"Oops! Internal server error :(",
+			http.StatusInternalServerError,
+		)
 	}
 }

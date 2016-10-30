@@ -11,13 +11,13 @@ import (
 )
 
 type Logger struct {
-	config *config.Config
+	Config *config.Config
 	file   *os.File
 	zap.Logger
 }
 
 func New(c *config.Config) (*Logger, error) {
-	l := &Logger{config: c}
+	l := &Logger{Config: c}
 
 	w, err := l.ApplicationLogWriter()
 	if err != nil {
@@ -34,7 +34,7 @@ func New(c *config.Config) (*Logger, error) {
 func (l *Logger) logLevel() zap.Level {
 	var lvl zap.Level
 
-	switch l.config.Application.LogLevel {
+	switch l.Config.Application.LogLevel {
 	case "info":
 		lvl = zap.InfoLevel
 	case "warn":
@@ -65,7 +65,7 @@ func (l *Logger) ServerLogWriter() (io.Writer, error) {
 		err error
 	)
 
-	logFile := l.config.Server.LogFile
+	logFile := l.Config.Server.LogFile
 	switch logFile {
 	case "null":
 		w = ioutil.Discard
@@ -88,7 +88,7 @@ func (l *Logger) ApplicationLogWriter() (zap.WriteSyncer, error) {
 		err error
 	)
 
-	logFile := l.config.Application.LogFile
+	logFile := l.Config.Application.LogFile
 	switch logFile {
 	case "null":
 		w = &NullWriteSyncer{ioutil.Discard}

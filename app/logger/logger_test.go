@@ -37,7 +37,7 @@ func TestCreateLogger(t *testing.T) {
 
 func TestLogLevel(t *testing.T) {
 	c := &config.Config{}
-	l := &Logger{config: c}
+	l := &Logger{Config: c}
 
 	c.Application.LogLevel = "info"
 	assert.Equal(t, zap.InfoLevel, l.logLevel())
@@ -68,7 +68,7 @@ func TestCreateServerLogWriter(t *testing.T) {
 	)
 
 	c := &config.Config{}
-	l := &Logger{config: c}
+	l := &Logger{Config: c}
 
 	// Negative test
 	c.Server.LogFile = "/i/am/not/here.log"
@@ -110,7 +110,7 @@ func TestCreateApplicationLogWriter(t *testing.T) {
 	)
 
 	c := &config.Config{}
-	l := &Logger{config: c}
+	l := &Logger{Config: c}
 
 	// Negative test
 	c.Application.LogFile = "/i/am/not/here.log"
