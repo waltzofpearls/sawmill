@@ -5,6 +5,7 @@ docker: dc
 
 dc: | dc-build dc-up dc-scale
 	@$(COMPOSE_ENV) docker-compose up -d --force-recreate lb
+	@$(COMPOSE_ENV) docker-compose exec api sh -c 'go run fixture/main.go'
 
 dc-down:
 	@$(COMPOSE_ENV) docker-compose down
