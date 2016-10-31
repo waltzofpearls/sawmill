@@ -1,6 +1,7 @@
 .PHONY: all deps
 
 PKG = $$(glide novendor)
+PKG_COVER = $$(go list ./... | grep -v /vendor/)
 
 all: build
 
@@ -27,7 +28,7 @@ clean:
 
 cover:
 	@echo "mode: count" > c.out
-	@for pkg in $(PKG); do \
+	@for pkg in $(PKG_COVER); do \
 		go test -coverprofile c.out.tmp $$pkg; \
 		tail -n +2 c.out.tmp >> c.out; \
 	done

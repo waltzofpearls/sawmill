@@ -36,30 +36,28 @@ func (sr *Subroute) ConfigWith(r *mux.Router, d *database.Database, c *config.Co
 }
 
 func (sr *Subroute) JsonResponseHandler(w http.ResponseWriter, r *http.Request, data interface{}) {
-	w.WriteHeader(http.StatusOK)
-	sr.JsonBaseHandler(w, r, data)
+	sr.JsonBaseHandler(w, r, http.StatusOK, data)
 }
 
 func (sr *Subroute) JsonNotFoundHandler(w http.ResponseWriter, r *http.Request, err error) {
 	var msg string
-	w.WriteHeader(http.StatusNotFound)
 	if err == nil {
 		msg = "Uh oh! You are requesting something that does not exist."
 	} else {
 		msg = err.Error()
 	}
-	jerr := JsonError{404, msg}
-	sr.JsonBaseHandler(w, r, jerr)
+	jerr := JsonError{http.StatusNotFound, msg}
+	sr.JsonBaseHandler(w, r, http.StatusNotFound, jerr)
 }
 
 func (sr *Subroute) JsonInternalErrorHandler(w http.ResponseWriter, r *http.Request, err error) {
-	w.WriteHeader(http.StatusInternalServerError)
-	jerr := JsonError{500, err.Error()}
-	sr.JsonBaseHandler(w, r, jerr)
+	jerr := JsonError{http.StatusInternalServerError, err.Error()}
+	sr.JsonBaseHandler(w, r, http.StatusInternalServerError, jerr)
 }
 
-func (sr *Subroute) JsonBaseHandler(w http.ResponseWriter, r *http.Request, data interface{}) {
+func (sr *Subroute) JsonBaseHandler(w http.ResponseWriter, r *http.Request, code int, data interface{}) {
 	w.Header().Set(JsonContentTypeKey, JsonContentTypeValue)
+	w.WriteHeader(code)
 	if err := json.NewEncoder(w).Encode(data); err != nil {
 		sr.Logger.Error(
 			"Internal server error.",
