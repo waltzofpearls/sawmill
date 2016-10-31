@@ -6,19 +6,22 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/waltzofpearls/sawmill/app/config"
+	"github.com/waltzofpearls/sawmill/app/database"
 	"github.com/waltzofpearls/sawmill/app/logger"
 )
 
 type ServiceProvider interface {
 	ConfigWith(string) error
-	Serve() error
+	Serve()
+	Shutdown()
 }
 
 type Api struct {
-	Config *config.Config
-	Logger *logger.Logger
-	Router *mux.Router
-	Writer io.Writer
+	Config   *config.Config
+	Database *database.Database
+	Logger   *logger.Logger
+	Router   *mux.Router
+	Writer   io.Writer
 }
 
 func New() *Api {
@@ -39,6 +42,9 @@ func (a *Api) ConfigWith(filePath string) error {
 	if a.Writer, err = a.Logger.ServerLogWriter(); err != nil {
 		return err
 	}
+	if a.Database, err = database.New(a.Config, a.Logger); err != nil {
+		return err
+	}
 
 	a.Route("/urlinfo/1", &Version1{})
 
@@ -47,11 +53,11 @@ func (a *Api) ConfigWith(filePath string) error {
 
 func (a *Api) Route(path string, sr Subrouter) {
 	r := a.Router.PathPrefix(path).Subrouter()
-	sr.ConfigWith(r, a.Config, a.Logger)
+	sr.ConfigWith(r, a.Database, a.Config, a.Logger)
 	sr.Handle()
 }
 
-func (a *Api) Serve() error {
+func (a *Api) Serve() {
 	a.Logger.Info("Start serving http request...")
 
 	http.ListenAndServe(
@@ -62,6 +68,9 @@ func (a *Api) Serve() error {
 			LoggingHandler(a.Writer),
 		),
 	)
+}
 
-	return nil
+func (a *Api) Shutdown() {
+	a.Logger.Close()
+	a.Database.Close()
 }

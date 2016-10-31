@@ -39,7 +39,7 @@ func TestJsonNotFoundHandler(t *testing.T) {
 	sr := &Subroute{}
 	r := new(mux.Router)
 	r.HandleFunc("/gandalf", func(w http.ResponseWriter, r *http.Request) {
-		sr.JsonNotFoundHandler(w, r)
+		sr.JsonNotFoundHandler(w, r, nil)
 	})
 
 	resp := httptest.NewRecorder()
@@ -61,7 +61,7 @@ func TestJsonInternalErrorHandler(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/sauron", nil)
 	r.ServeHTTP(resp, req)
 
-	expected := `{"errorMessage":"` + err.Error() + `"}`
+	expected := `{"status":500,"message":"` + err.Error() + `"}`
 
 	assert.Equal(t, http.StatusInternalServerError, resp.Code)
 	assert.JSONEq(t, expected, resp.Body.String())

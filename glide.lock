@@ -1,6 +1,21 @@
-hash: 1081deeefbf1532834d48dab0e3a00bddcbfcea4760acf4282b05b3ccaa289ac
-updated: 2016-10-29T23:40:14.654882489-07:00
+hash: c79cddb64b1cc8b88076361fc636f4668e7f77832c007bb56eb53489a6d33e29
+updated: 2016-10-30T17:20:46.073501904-07:00
 imports:
+- name: github.com/basho/backoff
+  version: 2ff7c4694083b5dbd71b21fd7cb7577477a74b31
+- name: github.com/basho/riak-go-client
+  version: 7dcadbcc49a395920fd97fb1ffbc8c79909fff8a
+  subpackages:
+  - rpb/riak
+  - rpb/riak_dt
+  - rpb/riak_kv
+  - rpb/riak_search
+  - rpb/riak_ts
+  - rpb/riak_yokozuna
+- name: github.com/golang/protobuf
+  version: 98fa357170587e470c5f27d3c3ea0947b71eb455
+  subpackages:
+  - proto
 - name: github.com/gorilla/context
   version: 1ea25387ff6f684839d82767c1733ff4d4d15d0a
 - name: github.com/gorilla/handlers

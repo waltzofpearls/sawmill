@@ -1,16 +1,53 @@
 version: "2"
 
 services:
+  db_coord:
+    image: basho/riak-kv
+    ports:
+      - "8087:8087"
+      - "8098:8098"
+    environment:
+      - CLUSTER_NAME=riakkv
+    labels:
+      - "com.basho.riak.cluster.name=riakkv"
+    volumes:
+      - schemas:/etc/riak/schemas
+  db_mem:
+    image: basho/riak-kv
+    ports:
+      - "8087"
+      - "8098"
+    labels:
+      - "com.basho.riak.cluster.name=riakkv"
+    links:
+      - db_coord
+    depends_on:
+      - db_coord
+    environment:
+      - CLUSTER_NAME=riakkv
+      - COORDINATOR_NODE=db_coord
   api:
     build:
       context: ../
       dockerfile: docker/Dockerfile
+    links:
+      - db_coord
+      - db_mem
+    depends_on:
+      - db_coord
+      - db_mem
   lb:
     image: haproxy:1.6-alpine
-    links:
-      - api
     ports:
       - "8000:80"
       - "9000:90"
+    links:
+      - api
+    depends_on:
+      - api
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+
+volumes:
+  schemas:
+    external: false

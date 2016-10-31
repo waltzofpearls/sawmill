@@ -1,9 +1,12 @@
 package api
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/waltzofpearls/sawmill/app/manager"
+	"github.com/waltzofpearls/sawmill/app/repository"
 )
 
 type Version1 struct {
@@ -16,11 +19,22 @@ func (v1 *Version1) Handle() {
 }
 
 func (v1 *Version1) notFoundHandler(w http.ResponseWriter, r *http.Request) {
-	v1.JsonNotFoundHandler(w, r)
+	v1.JsonNotFoundHandler(w, r, nil)
 }
 
 func (v1 *Version1) urlHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	vars["query"] = r.URL.RawQuery
-	v1.JsonResponseHandler(w, r, vars)
+	v := mux.Vars(r)
+	c := v1.Database.Cluster
+
+	rpo := repository.NewUrlInfoRepository(c)
+	man := manager.NewUrlInfoManager(rpo)
+	urlInfo, err := man.GetUrlInfo(v["host"], v["path"], r.URL.RawQuery)
+
+	if err == repository.ErrKeyNotFound {
+		v1.JsonNotFoundHandler(w, r, errors.New("Requested URL does not exist in the database."))
+	} else if err != nil {
+		v1.JsonInternalErrorHandler(w, r, err)
+	} else {
+		v1.JsonResponseHandler(w, r, urlInfo)
+	}
 }

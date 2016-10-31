@@ -1,13 +1,16 @@
 package api
 
+import "fmt"
+
 type JsonError struct {
-	ErrorMessage string `json:"errorMessage"`
+	Status  int    `json:"status"`
+	Message string `json:"message"`
 }
 
 func (e JsonError) Error() string {
-	return e.ErrorMessage
+	return fmt.Sprintf("Error (%d): %s", e.Status, e.Message)
 }
 
 func (e JsonError) String() string {
-	return e.ErrorMessage
+	return fmt.Sprintf("Error (%d): %s", e.Status, e.Message)
 }

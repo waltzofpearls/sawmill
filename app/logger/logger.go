@@ -12,7 +12,8 @@ import (
 
 type Logger struct {
 	Config *config.Config
-	file   *os.File
+	appLog *os.File
+	srvLog *os.File
 	zap.Logger
 }
 
@@ -54,8 +55,11 @@ func (l *Logger) logLevel() zap.Level {
 }
 
 func (l *Logger) Close() {
-	if l.file != nil {
-		l.file.Close()
+	if l.srvLog != nil {
+		l.srvLog.Close()
+	}
+	if l.appLog != nil {
+		l.appLog.Close()
 	}
 }
 
@@ -76,6 +80,7 @@ func (l *Logger) ServerLogWriter() (io.Writer, error) {
 		if err != nil {
 			return nil, err
 		}
+		l.srvLog = w.(*os.File)
 	}
 	return w, nil
 }
@@ -99,6 +104,7 @@ func (l *Logger) ApplicationLogWriter() (zap.WriteSyncer, error) {
 		if err != nil {
 			return nil, err
 		}
+		l.appLog = w.(*os.File)
 	}
 
 	ws, ok := w.(zap.WriteSyncer)
@@ -113,7 +119,6 @@ func (l *Logger) logFileWriter(logFile string) (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
-	l.file = f
 	return f, nil
 }
 

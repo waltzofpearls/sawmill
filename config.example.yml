@@ -5,3 +5,7 @@ server:
 application:
   log_file: logs/app.log
   log_level: debug
+
+database:
+  nodes:
+    - 127.0.0.1:8087

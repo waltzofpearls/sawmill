@@ -22,6 +22,10 @@ server:
 application:
   log_file: stdout
   log_level: debug
+
+database:
+  nodes:
+    - 127.0.0.1:8087
 `
 
 func TestCreateConfig(t *testing.T) {
@@ -59,6 +63,11 @@ func TestCreateConfig(t *testing.T) {
 		}{
 			LogFile:  "stdout",
 			LogLevel: "debug",
+		},
+		Database: struct {
+			Nodes []string
+		}{
+			Nodes: []string{"127.0.0.1:8087"},
 		},
 	}
 	actual, err := New(filePath)

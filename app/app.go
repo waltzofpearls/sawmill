@@ -31,13 +31,14 @@ func (a *App) Run() error {
 		},
 	})
 	a.Cmd.SetAction(func(c *cli.Context) error {
+		defer func() {
+			a.Api.Shutdown()
+		}()
 		file := c.String("config")
 		if err := a.Api.ConfigWith(file); err != nil {
 			return err
 		}
-		if err := a.Api.Serve(); err != nil {
-			return err
-		}
+		a.Api.Serve()
 		return nil
 	})
 	return a.Cmd.Run(os.Args)

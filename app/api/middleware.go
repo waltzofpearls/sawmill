@@ -20,7 +20,9 @@ func AttachMiddleware(h http.Handler, middlewares ...Middleware) http.Handler {
 func Catch404Handler() Middleware {
 	return func(h http.Handler) http.Handler {
 		sr := &Subroute{}
-		hf := http.HandlerFunc(sr.JsonNotFoundHandler)
+		hf := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			sr.JsonNotFoundHandler(w, r, nil)
+		})
 		r, ok := h.(*mux.Router)
 		if !ok {
 			return hf

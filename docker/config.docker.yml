@@ -5,3 +5,9 @@ server:
 application:
   log_file: stdout
   log_level: debug
+
+database:
+  nodes:
+    - db_coord_1:8087
+    - db_mem_1:8087
+    - db_mem_2:8087

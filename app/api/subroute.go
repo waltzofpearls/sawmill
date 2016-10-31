@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/uber-go/zap"
 	"github.com/waltzofpearls/sawmill/app/config"
+	"github.com/waltzofpearls/sawmill/app/database"
 	"github.com/waltzofpearls/sawmill/app/logger"
 )
 
@@ -16,20 +17,22 @@ const (
 )
 
 type Subrouter interface {
-	ConfigWith(*mux.Router, *config.Config, *logger.Logger)
+	ConfigWith(*mux.Router, *database.Database, *config.Config, *logger.Logger)
 	Handle()
 }
 
 type Subroute struct {
-	Config *config.Config
-	Logger *logger.Logger
-	Router *mux.Router
+	Config   *config.Config
+	Database *database.Database
+	Logger   *logger.Logger
+	Router   *mux.Router
 }
 
-func (sr *Subroute) ConfigWith(r *mux.Router, c *config.Config, l *logger.Logger) {
+func (sr *Subroute) ConfigWith(r *mux.Router, d *database.Database, c *config.Config, l *logger.Logger) {
 	sr.Router = r
 	sr.Config = c
 	sr.Logger = l
+	sr.Database = d
 }
 
 func (sr *Subroute) JsonResponseHandler(w http.ResponseWriter, r *http.Request, data interface{}) {
@@ -37,15 +40,21 @@ func (sr *Subroute) JsonResponseHandler(w http.ResponseWriter, r *http.Request, 
 	sr.JsonBaseHandler(w, r, data)
 }
 
-func (sr *Subroute) JsonNotFoundHandler(w http.ResponseWriter, r *http.Request) {
+func (sr *Subroute) JsonNotFoundHandler(w http.ResponseWriter, r *http.Request, err error) {
+	var msg string
 	w.WriteHeader(http.StatusNotFound)
-	jerr := JsonError{"Uh oh! You are requesting something that does not exist."}
+	if err == nil {
+		msg = "Uh oh! You are requesting something that does not exist."
+	} else {
+		msg = err.Error()
+	}
+	jerr := JsonError{404, msg}
 	sr.JsonBaseHandler(w, r, jerr)
 }
 
 func (sr *Subroute) JsonInternalErrorHandler(w http.ResponseWriter, r *http.Request, err error) {
 	w.WriteHeader(http.StatusInternalServerError)
-	jerr := JsonError{err.Error()}
+	jerr := JsonError{500, err.Error()}
 	sr.JsonBaseHandler(w, r, jerr)
 }
 

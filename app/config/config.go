@@ -16,6 +16,9 @@ type Config struct {
 		LogFile  string `yaml:"log_file"`
 		LogLevel string `yaml:"log_level"`
 	}
+	Database struct {
+		Nodes []string
+	}
 }
 
 func New(filePath string) (*Config, error) {

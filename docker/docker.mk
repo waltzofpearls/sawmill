@@ -1,16 +1,25 @@
 COMPOSE_ENV = env COMPOSE_PROJECT_NAME=sawmill \
 				  COMPOSE_FILE=docker/docker-compose.yml
 
-docker: | compose-build compose-scale compose-up
+docker: dc
 
-compose-build:
+dc: | dc-build dc-up dc-scale
+	@$(COMPOSE_ENV) docker-compose up -d --force-recreate lb
+
+dc-down:
+	@$(COMPOSE_ENV) docker-compose down
+
+dc-ps:
+	@$(COMPOSE_ENV) docker-compose ps
+
+dc-build:
 	@echo 'Building services with docker...'
 	@$(COMPOSE_ENV) docker-compose build
 
-compose-up:
+dc-up:
 	@echo 'Starting up docker services...'
 	@$(COMPOSE_ENV) docker-compose up -d --force-recreate
 
-compose-scale:
-	@echo 'Scaling docker services api=2...'
-	@$(COMPOSE_ENV) docker-compose scale api=2
+dc-scale:
+	@echo 'Scaling docker services api=2 db_mem=2...'
+	@$(COMPOSE_ENV) docker-compose scale api=2 db_mem=2

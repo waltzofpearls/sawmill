@@ -13,8 +13,10 @@ import (
 
 type FakeApi struct{}
 
-func (a *FakeApi) ConfigWith(file string) error { return nil }
-func (a *FakeApi) Serve() error                 { return nil }
+func (a *FakeApi) ConfigWith(filePath string) error { return nil }
+
+func (a *FakeApi) Serve()    {}
+func (a *FakeApi) Shutdown() {}
 
 type FakeCmd struct {
 	*cli.App
