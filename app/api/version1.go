@@ -26,9 +26,10 @@ func (v1 *Version1) urlHandler(w http.ResponseWriter, r *http.Request) {
 	v := mux.Vars(r)
 	c := v1.Database.Cluster
 
-	rpo := repository.NewUrlInfoRepository(c)
-	man := manager.NewUrlInfoManager(rpo)
-	urlInfo, err := man.GetUrlInfo(v["host"], v["path"], r.URL.RawQuery)
+	rpo := repository.NewUrlInfo(c)
+	mgr := manager.NewUrlInfo(rpo)
+
+	urlInfo, err := mgr.GetUrlInfo(v["host"], v["path"], r.URL.RawQuery)
 
 	if err == repository.ErrKeyNotFound {
 		v1.JsonNotFoundHandler(w, r, errors.New("Requested URL does not exist in the database."))

@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type UrlInfoModel struct {
+type UrlInfo struct {
 	modelImpl
 	Url         string
 	Description string
@@ -11,18 +11,18 @@ type UrlInfoModel struct {
 	Updated     time.Time
 }
 
-func NewUrlInfoModel(url, description string, hasMalware bool) *UrlInfoModel {
-	um := &UrlInfoModel{
+func NewUrlInfo(url, description string, hasMalware bool) *UrlInfo {
+	mdl := &UrlInfo{
 		Url:         url,
 		Description: description,
 		HasMalware:  hasMalware,
 		Created:     time.Now(),
 		Updated:     time.Now(),
 	}
-	um.SetId(url)
-	return um
+	mdl.SetId(url)
+	return mdl
 }
 
-func (um *UrlInfoModel) GetId() string {
-	return um.Url
+func (mdl *UrlInfo) GetId() string {
+	return mdl.Url
 }

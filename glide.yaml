@@ -21,3 +21,4 @@ import:
 - package: github.com/basho/riak-go-client
   version: ~1.7.0
 - package: github.com/basho/backoff
+- package: github.com/manveru/faker

@@ -1,5 +1,5 @@
-hash: c79cddb64b1cc8b88076361fc636f4668e7f77832c007bb56eb53489a6d33e29
-updated: 2016-10-30T17:20:46.073501904-07:00
+hash: 3e1ab1daa682c390aa7365f80e635d3d091c910a5772096c0751ec3081f24408
+updated: 2016-10-31T15:59:05.399243153-07:00
 imports:
 - name: github.com/basho/backoff
   version: 2ff7c4694083b5dbd71b21fd7cb7577477a74b31
@@ -22,6 +22,8 @@ imports:
   version: ee54c7b44cab12289237fb8631314790076e728b
 - name: github.com/gorilla/mux
   version: 0eeaf8392f5b04950925b8a69fe70f110fa7cbfc
+- name: github.com/manveru/faker
+  version: 717f7cf83fb78669bfab612749c2e8ff63d5be11
 - name: github.com/stretchr/testify
   version: 69483b4bd14f5845b5a1e55bca19e954e827f1d0
   subpackages:
