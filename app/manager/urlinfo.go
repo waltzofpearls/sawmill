@@ -1,14 +1,12 @@
 package manager
 
 import (
-	"fmt"
-
 	"github.com/waltzofpearls/sawmill/app/model"
 	"github.com/waltzofpearls/sawmill/app/repository"
 )
 
 type UrlInfo struct {
-	urlInfoRepo *repository.UrlInfo
+	urlInfoRepo repository.Repository
 }
 
 func NewUrlInfo(rpo *repository.UrlInfo) *UrlInfo {
@@ -22,7 +20,6 @@ func (mgr *UrlInfo) GetUrlInfo(host, path, query string) (*model.UrlInfo, error)
 	if query != "" {
 		url += "?" + query
 	}
-	fmt.Println(url)
 	mdl, err := mgr.urlInfoRepo.Get(url, false)
 	if err != nil {
 		return nil, err

@@ -3,7 +3,7 @@ package repository
 import (
 	"time"
 
-	riak "github.com/basho/riak-go-client"
+	"github.com/waltzofpearls/sawmill/app/database"
 	"github.com/waltzofpearls/sawmill/app/model"
 )
 
@@ -11,7 +11,7 @@ type UrlInfo struct {
 	repositoryImpl
 }
 
-func NewUrlInfo(c *riak.Cluster) *UrlInfo {
+func NewUrlInfo(c database.RiakCluster) *UrlInfo {
 	rpo := &UrlInfo{}
 	rpo.cluster = c
 	return rpo

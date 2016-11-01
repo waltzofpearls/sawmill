@@ -13,7 +13,7 @@ import (
 
 const (
 	JsonContentTypeKey   = "Content-Type"
-	JsonContentTypeValue = "application/json; charset=UTF-8"
+	JsonContentTypeValue = "application/json"
 )
 
 type Subrouter interface {

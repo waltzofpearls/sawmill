@@ -4,11 +4,11 @@ import "time"
 
 type UrlInfo struct {
 	modelImpl
-	Url         string
-	Description string
-	HasMalware  bool
-	Created     time.Time
-	Updated     time.Time
+	Url         string    `json:"url"`
+	Description string    `json:"description"`
+	HasMalware  bool      `json:"has_malware"`
+	Created     time.Time `json:"created"`
+	Updated     time.Time `json:"updated"`
 }
 
 func NewUrlInfo(url, description string, hasMalware bool) *UrlInfo {

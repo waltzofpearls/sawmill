@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	riak "github.com/basho/riak-go-client"
+	"github.com/waltzofpearls/sawmill/app/database"
 	"github.com/waltzofpearls/sawmill/app/model"
 )
 
@@ -18,14 +19,14 @@ type Repository interface {
 	Save(model.Model) (model.Model, error)
 	getBucketName() string
 	getModel() model.Model
-	getCluster() *riak.Cluster
+	getCluster() database.RiakCluster
 }
 
 type repositoryImpl struct {
-	cluster *riak.Cluster
+	cluster database.RiakCluster
 }
 
-func (r *repositoryImpl) getCluster() *riak.Cluster {
+func (r *repositoryImpl) getCluster() database.RiakCluster {
 	return r.cluster
 }
 

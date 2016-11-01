@@ -42,7 +42,8 @@ func (a *Api) ConfigWith(filePath string) error {
 	if a.Writer, err = a.Logger.ServerLogWriter(); err != nil {
 		return err
 	}
-	if a.Database, err = database.New(a.Config, a.Logger); err != nil {
+	adapter := &database.Riak{}
+	if a.Database, err = database.New(adapter, a.Config, a.Logger); err != nil {
 		return err
 	}
 

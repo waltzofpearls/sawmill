@@ -5,6 +5,7 @@ setup: dc
 teardown: dc-down
 
 NUM = 100
+SCALE = api=2 db_mem=2
 
 .PHONY: fixture
 fixture:
@@ -28,5 +29,5 @@ dc-up:
 	@$(COMPOSE_ENV) docker-compose up -d --force-recreate
 
 dc-scale:
-	@echo 'Scaling docker services api=2 db_mem=2...'
-	@$(COMPOSE_ENV) docker-compose scale api=2 db_mem=2
+	@echo 'Scaling docker services $(SCALE)...'
+	@$(COMPOSE_ENV) docker-compose scale $(SCALE)

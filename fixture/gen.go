@@ -49,7 +49,8 @@ func connectToRiak() (*database.Database, *logger.Logger, error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	db, err := database.New(cf, lg)
+	adapter := &database.Riak{}
+	db, err := database.New(adapter, cf, lg)
 	if err != nil {
 		return nil, nil, err
 	}
