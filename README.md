@@ -26,15 +26,15 @@ You have two options to run sawmill locally: 1) through the Docker setup; 2) com
 
 *Sawmill <3 docker*
 
-TL;DR: It's a much easier approach to go with Docker, since it uses Compose and has all the
-necessary services configured within the `docker-compose.yml` file.
+TL;DR: It's much easier to use Docker, since it Compose has all the necessary services
+configured within the `docker-compose.yml` file.
 
-*Requirements*
+**Requirements**
 
 - Docker
 - Docker-compose (with version 2 support)
 
-*Build and run*
+**Build and run**
 
 ```shell
 git clone https://github.com/waltzofpearls/sawmill.git && cd sawmill
@@ -44,13 +44,12 @@ make setup
 make fixture
 ```
 
-*Data fixture*
+**Data fixture**
 
 By default, `make fixture` loads `100` records to `urlinfo` bucket. You can pass a different
 number to the command like `make fixture NUM=30`.
 
-If you see errors from the fixture loading command, try the following steps, and it may fix
-your problem:
+If you see errors while generating fixtures, try the following steps, and it may fix the problem:
 
 ```
 make teardown
@@ -58,11 +57,11 @@ make setup
 make fixture
 ```
 
-*Teardown*
+**Teardown**
 
 To shutdown and remove all the sawmill related Docker containers, run `make teardown`.
 
-*Scaling*
+**Scaling**
 
 For scaling up/down API or Riak KV nodes, take the following two steps:
 
@@ -81,14 +80,14 @@ make dc-up
 
 ### 2. Compile from source
 
-*Requirements*
+**Requirements**
 
 - Go 1.7+
 - Glide
 - Riak KV (single node or cluster)
 - HAProxy (optional)
 
-*Build and run*
+**Build and run**
 
 ```shell
 make
@@ -104,7 +103,7 @@ For unit test, run `make test`, and to generate code coverage report, run `make 
 
 ## API Endpoints
 
-### Check a given URL for malware
+#### Check a given URL for malware
 
 *Request*
 
@@ -114,19 +113,18 @@ GET /urlinfo/1/{hostname_and_port}/{original_path_and_query_string}
 
 *Response*
 
-Code: `200 OK`
+- Code: `200 OK`
+- Headers: `Content-Type: application/json`
 
-Headers: `Content-Type: application/json`
-
-Body:
+*Body*
 
 ```json
 {
   "url": "reillyjones.org/iliana.raynor?8hzo2=r7x8k242",
   "description": "Est maiores fuga ipsum omnis eveniet quia. Voluptatem excepturi pariatur ab debitis. Quae omnis quia alias.",
-  "has_malware":true,
-  "created":"2016-11-01T04:43:51.704359757Z",
-  "updated":"2016-11-01T04:43:51.704360064Z"
+  "has_malware": true,
+  "created": "2016-11-01T04:43:51.704359757Z",
+  "updated": "2016-11-01T04:43:51.704360064Z"
 }
 ```
 
@@ -154,57 +152,57 @@ if any node goes down.
 ### Folder structure
 
 ```
-├── LICENSE ------------------------- MIT License
-├── Makefile ------------------------ go development related make targets
-├── README.md ----------------------- this file itself
-├── app ----------------------------- package for the CLI app
-│   ├── api ------------------------- package for the API server
-│   │   ├── api.go ------------------ api.New() package entry point
-│   │   ├── api_test.go ------------- test file for api
-│   │   ├── json_error.go ----------- JsonError struct with status and message attributes for serialization
-│   │   ├── middleware.go ----------- HTTP middlewares handles 404 and logging
-│   │   ├── middleware_test.go ------ test file middleware
-│   │   ├── subroute.go ------------- middleware that handles sub-route with base JSON response handlers
-│   │   ├── subroute_test.go -------- test file for subroute
-│   │   ├── version1.go ------------- /urlinfo/1 is defined in api, and it points version1 to handle sub-routes
-│   │   └── version1_test.go -------- test file for version1
-│   ├── app.go ---------------------- app.New() package entry point
-│   ├── app_test.go ----------------- test file for app
-│   ├── cmd.go ---------------------- cli methods wrapper for easily mocking and testing app
-│   ├── config ---------------------- package for YAML configuration
-│   │   ├── config.go --------------- config.New() package entry point
-│   │   └── config_test.go ---------- test file for config
-│   ├── database -------------------- package for Riak database back-end
-│   │   ├── database.go ------------- database.New() package entry point, deals with Riak connection
-│   │   ├── database_test.go -------- test for database
-│   │   └── riak.go ----------------- Riak methods wrapper for easily mocking and testing database
-│   ├── logger ---------------------- package for logger (uses Uber zap log)
-│   │   ├── logger.go --------------- logger.New()
-│   │   └── logger_test.go ---------- test file for logger
-│   ├── manager --------------------- package for mediator layer that works with repo and model
-│   │   ├── urlinfo.go -------------- manager.NewUrlInfo()
-│   │   └── urlinfo_test.go --------- test file for UrlInfo manager
-│   ├── model ----------------------- package for ORM models
-│   │   ├── model.go ---------------- base model
-│   │   ├── urlinfo.go -------------- model.NewUrlInfo()
-│   │   └── urlinfo_test.go --------- test file for UrlInfo model
-│   └── repository ------------------ package for ORM repositories
-│       ├── repository.go ----------- base repository
-│       ├── repository_test.go ------ test file for base repository
-│       └── urlinfo.go -------------- repository.NewUrlInfo()
-├── config.example.yml -------------- an example of config.yml
-├── docker -------------------------- everything docker!! (Just kidding)
-│   ├── Dockerfile ------------------ the mighty Dockerfile...
-│   ├── config.docker.yml ----------- a copy of sawmill config.yml customized the Docker setup
-│   ├── docker-compose.yml ---------- and the mighty docker-compose.yml file...
-│   ├── docker.mk ------------------- Docker related make targets
-│   └── haproxy.cfg ----------------- HAProxy config file
-├── fixture ------------------------- data fixture generation program
-│   └── gen.go ---------------------- run "make fixture" (Docker) or "go run fixture/gen.go" (no Docker)
-├── glide.lock ---------------------- glide package manager lock file
-├── glide.yaml ---------------------- glide package manager config file
-├── logs ---------------------------- this folder can be used to store all the log files
-├── main.go ------------------------- go main.main. Create CLI app and run it
+├── LICENSE ---------------------- MIT License
+├── Makefile --------------------- go development related make targets
+├── README.md -------------------- this file itself
+├── app -------------------------- package for the CLI app
+│   ├── api ---------------------- package for the API server
+│   │   ├── api.go --------------- api.New() package entry point
+│   │   ├── api_test.go ---------- test file for api
+│   │   ├── json_error.go -------- JsonError struct with status and message attributes for serialization
+│   │   ├── middleware.go -------- HTTP middlewares handles 404 and logging
+│   │   ├── middleware_test.go --- test file middleware
+│   │   ├── subroute.go ---------- middleware that handles sub-route with base JSON response handlers
+│   │   ├── subroute_test.go ----- test file for subroute
+│   │   ├── version1.go ---------- /urlinfo/1 is defined in api, it uses version1 to handle sub-routes
+│   │   └── version1_test.go ----- test file for version1
+│   ├── app.go ------------------- app.New() package entry point
+│   ├── app_test.go -------------- test file for app
+│   ├── cmd.go ------------------- cli methods wrapper for easily mocking and testing app
+│   ├── config ------------------- package for YAML configuration
+│   │   ├── config.go ------------ config.New() package entry point
+│   │   └── config_test.go ------- test file for config
+│   ├── database ----------------- package for Riak database back-end
+│   │   ├── database.go ---------- database.New() package entry point, deals with Riak connection
+│   │   ├── database_test.go ----- test for database
+│   │   └── riak.go -------------- Riak methods wrapper for easily mocking and testing database
+│   ├── logger ------------------- package for logger (uses Uber zap log)
+│   │   ├── logger.go ------------ logger.New()
+│   │   └── logger_test.go ------- test file for logger
+│   ├── manager ------------------ package for mediator layer that works with repo and model
+│   │   ├── urlinfo.go ----------- manager.NewUrlInfo()
+│   │   └── urlinfo_test.go ------ test file for UrlInfo manager
+│   ├── model -------------------- package for ORM models
+│   │   ├── model.go ------------- base model
+│   │   ├── urlinfo.go ----------- model.NewUrlInfo()
+│   │   └── urlinfo_test.go ------ test file for UrlInfo model
+│   └── repository --------------- package for ORM repositories
+│       ├── repository.go -------- base repository
+│       ├── repository_test.go --- test file for base repository
+│       └── urlinfo.go ----------- repository.NewUrlInfo()
+├── config.example.yml ----------- an example of config.yml
+├── docker ----------------------- everything docker!! (Just kidding)
+│   ├── Dockerfile --------------- the mighty Dockerfile...
+│   ├── config.docker.yml -------- a copy of sawmill config.yml customized the Docker setup
+│   ├── docker-compose.yml ------- and the mighty docker-compose.yml file...
+│   ├── docker.mk ---------------- Docker related make targets
+│   └── haproxy.cfg -------------- HAProxy config file
+├── fixture ---------------------- data fixture generation program
+│   └── gen.go ------------------- run "make fixture" (Docker) or "go run fixture/gen.go" (no Docker)
+├── glide.lock ------------------- glide package manager lock file
+├── glide.yaml ------------------- glide package manager config file
+├── logs ------------------------- this folder can be used to store all the log files
+├── main.go ---------------------- go main.main. Create CLI app and run it
 ```
 
 ### A bit more about Riak KV
@@ -213,7 +211,7 @@ The default Docker setup was created for development and demo purposes, and it u
 default Bitcask backend, N=3 replication and ring size 64. In a production environment setup,
 backend, replication and ring size need to be planned carefully with actual use case.
 
-*Backend*
+**Backend**
 
 Bitcask vs LevelDB
 
@@ -221,14 +219,14 @@ Bitcask loads the keyspace into memory. It's faster with low latency, but if the
 larger than what the memory can contain, it will severely impact performance with a lot of
 swapping.
 
-*Replication*
+**Replication**
 
 N value can be set differently for each bucket or object. Have a look at Riak's official
 doc for replication and N value.
 
 http://docs.basho.com/riak/kv/2.1.4/learn/concepts/replication/
 
-*Ring size*
+**Ring size**
 
 By default, Riak uses 64 as ring size. It's works well for a 3-node development cluster.
 For actual production, see the following table for recommended ring size.
