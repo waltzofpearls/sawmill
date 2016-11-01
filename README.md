@@ -202,8 +202,48 @@ if any node goes down.
 ├── glide.lock ------------------- glide package manager lock file
 ├── glide.yaml ------------------- glide package manager config file
 ├── logs ------------------------- this folder can be used to store all the log files
-├── main.go ---------------------- go main.main. Create CLI app and run it
+└── main.go ---------------------- go main.main. Create CLI app and run it
 ```
+
+### Something about deployment
+
+`make rel` or `make release` will make deployable bundles in `dist/release` folder. A typical
+bundle looks like this:
+
+```
+sawmill_linux_amd64/
+├── LICENSE
+├── README.md
+├── config.example.yml
+└── sawmill
+```
+
+Send the bundle for the right platform to servers for deployment. This can be managed by tools
+like ansible or chef.
+
+A copy of production `config.yml` file should be maintained seprately and not check into this
+git repo.
+
+The compiled binary file `sawmill` packed with go runtime, so it basically doesn't need any
+dependencies installed on deployment target servers.
+
+`sawmill` program can be managed by a process manager like supervisor, which can automatically
+start/restart the process.
+
+A typical deployment process will look like this:
+
+(Assuming the production setup has more than one `sawmill` API instances)
+
+- take out some of the instances from the load balancers
+- send the bundle to those "offline" instances
+- extract the bundle and replace the existing `sawmill` program
+- optionally send the new `config.yml` file to those instances
+- restart the process on the servers with supervisor
+- run automated tests against those "offline" instances
+- if everything goes well put those instances back to the load balancers and proceed to the
+  next batch of `sawmill` API instances
+- if failed then roll back to the previous version, stop the deployment process, and send
+  out alerts to people
 
 ### A bit more about Riak KV
 

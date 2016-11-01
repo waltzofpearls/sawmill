@@ -29,3 +29,6 @@ config.yml
 c.out
 c.out.tmp
 sawmill
+
+dist/builds/
+dist/release/

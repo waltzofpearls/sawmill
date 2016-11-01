@@ -33,3 +33,8 @@ cover:
 		tail -n +2 c.out.tmp >> c.out; \
 	done
 	go tool cover -html=c.out
+
+rel: release
+
+release:
+	./dist/release.sh
