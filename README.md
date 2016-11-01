@@ -3,12 +3,14 @@
 [![Build Status](https://travis-ci.org/waltzofpearls/sawmill.svg)](https://travis-ci.org/waltzofpearls/sawmill)
 [![Go Report Card](https://goreportcard.com/badge/github.com/waltzofpearls/sawmill)](https://goreportcard.com/report/github.com/waltzofpearls/sawmill)
 
+```
 ███████╗ █████╗ ██╗    ██╗███╗   ███╗██╗██╗     ██╗
 ██╔════╝██╔══██╗██║    ██║████╗ ████║██║██║     ██║
 ███████╗███████║██║ █╗ ██║██╔████╔██║██║██║     ██║
 ╚════██║██╔══██║██║███╗██║██║╚██╔╝██║██║██║     ██║
 ███████║██║  ██║╚███╔███╔╝██║ ╚═╝ ██║██║███████╗███████╗
 ╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚═╝     ╚═╝╚═╝╚══════╝╚══════╝
+```
 
 Sawmill is a simple web service with a tiny REST API. It helps check if a given URL/website
 could contain phishing, malware, viruses, unwanted software or reported suspicious contents.
