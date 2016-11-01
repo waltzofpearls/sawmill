@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"strconv"
 	"strings"
-	"time"
 
 	"github.com/manveru/faker"
 	"github.com/waltzofpearls/sawmill/app/config"
@@ -19,29 +20,50 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	cf, err := config.New("config.yml")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	lg, err := logger.New(cf)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	db, err := database.New(cf, lg)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	c := db.Cluster
 
-	rpo := repository.NewUrlInfo(c)
+	db, lg, err := connectToRiak()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer db.Close()
 
-	for i := 0; i < 100; i++ {
+	rpo := repository.NewUrlInfo(db.Cluster)
+	num := parseFixtureNum()
+
+	lg.Info(fmt.Sprintf("Generating [%d] data fixtures...", num))
+
+	for i := 0; i < num; i++ {
 		mdl := generateUrlInfo(fake)
 		if _, err := rpo.Save(mdl); err != nil {
 			log.Fatalln(err)
 		}
-		time.Sleep(500 * time.Millisecond)
 	}
+}
+
+func connectToRiak() (*database.Database, *logger.Logger, error) {
+	cf, err := config.New("config.yml")
+	if err != nil {
+		return nil, nil, err
+	}
+	lg, err := logger.New(cf)
+	if err != nil {
+		return nil, nil, err
+	}
+	db, err := database.New(cf, lg)
+	if err != nil {
+		return nil, nil, err
+	}
+	return db, lg, nil
+}
+
+func parseFixtureNum() int {
+	num := 100
+	if len(os.Args) > 1 {
+		if i, err := strconv.Atoi(os.Args[1]); err == nil {
+			num = i
+		}
+	}
+	return num
 }
 
 func generateUrlInfo(fake *faker.Faker) *model.UrlInfo {
